@@ -1,0 +1,5 @@
+bin/
+obj/
+ffmpeg.exe
+youtube-dl.exe
+System*
