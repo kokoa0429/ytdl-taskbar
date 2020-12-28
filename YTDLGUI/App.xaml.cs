@@ -41,11 +41,14 @@ namespace YTDLGUI
 
             ToolStripMenuItem menuItem = new ToolStripMenuItem();
             ToolStripMenuItem menuItem3 = new ToolStripMenuItem();
-            menuItem.Text = "&設定";
+            menuItem.Text = "&フォルダを開く";
             menuItem.Click += (s, e) =>
             {
+                System.Diagnostics.Process.Start("explorer.exe",Directory.GetCurrentDirectory()+"\\output");
+                /*
                 var setting = new MainWindow();
                 setting.Show();
+                */
             };
 
             menuItem3.Text = "&終了";
