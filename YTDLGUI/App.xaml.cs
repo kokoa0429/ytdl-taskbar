@@ -18,7 +18,9 @@ namespace YTDLGUI
 
     public partial class App : System.Windows.Application
     {
-
+        NotifyIcon icon;
+        System.Drawing.Icon defaultIcon;
+        System.Drawing.Icon downloading;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -26,11 +28,13 @@ namespace YTDLGUI
         }
         private void createNotifyIcon()
         {
-            NotifyIcon icon = new NotifyIcon();
+            defaultIcon = new System.Drawing.Icon("./icon.ico");
+            downloading = new System.Drawing.Icon("./downloading.ico");
+            icon = new NotifyIcon();
 
-            icon.Icon = new System.Drawing.Icon("./icon.ico");
+            icon.Icon = defaultIcon;
             icon.Visible = true;
-            icon.Text = "SteamLogger";
+            icon.Text = "YTDLGUI";
             var menu = new ContextMenuStrip();
 
             icon.DoubleClick += new System.EventHandler(this.DoubleClick);
@@ -61,11 +65,15 @@ namespace YTDLGUI
             string urlText = System.Windows.Clipboard.GetText();
             string regex = "^?v=([^&]+)";
             Match match = Regex.Match(urlText, regex);
-            this.YTDownload("https://youtube.com/watch?"+match.Value);
+            if (match.Success)
+            {
+                this.YTDownload("https://youtube.com/watch?" + match.Value);
+            }
 
         }
         public void YTDownload(string url)
         {
+            icon.Icon = downloading;
             ProcessStartInfo info = new ProcessStartInfo();
             info.FileName = "youtube-dl.exe";
             info.Arguments = $"-f bestvideo+bestaudio -o output/%(title)s-%(id)s.%(ext)s {url} ";
@@ -84,7 +92,7 @@ namespace YTDLGUI
             var notifier = ToastNotificationManager.CreateToastNotifier("YoutubeDownloaderGUI");
             var notification = new ToastNotification(template);
             notifier.Show(notification);
-
+            icon.Icon = defaultIcon;
         }
     }
 }
